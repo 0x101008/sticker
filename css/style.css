@@ -1,0 +1,629 @@
+﻿﻿﻿﻿/* 基础设置 */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #6c757d;
+  --success-color: #2ecc71;
+  --danger-color: #e74c3c;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --border-radius: 8px;
+  --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --container-bg: #fff;
+  --bg-image: none;
+}
+
+/* 基础样式 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.app-description {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.note-generator {
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    resize: vertical;
+    min-height: 120px;
+    transition: border 0.3s ease;
+    box-sizing: border-box;
+}
+
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-image: linear-gradient(to right, #3498db, #2980b9);
+}
+
+button:hover {
+    background-image: linear-gradient(to right, #2980b9, #2573a7);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button i {
+    margin-right: 8px;
+}
+
+#generate-btn {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 18px;
+    padding: 15px;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 图片上传区域样式 - 仅在创建页面使用 */
+.create-page .image-upload-container {
+    margin-top: 20px;
+}
+
+.create-page .image-upload-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.create-page .image-upload-area {
+    border: 2px dashed var(--secondary-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    background-color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.create-page .image-upload-area:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--box-shadow);
+}
+
+.create-page .image-upload-area.dragover {
+    border-color: var(--primary-color);
+    background-color: rgba(74, 111, 165, 0.1);
+}
+
+.create-page .image-upload-area.has-image {
+    border-color: var(--success-color);
+    padding: 0.5rem;
+}
+
+.image-upload-icon {
+    font-size: 48px;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.image-upload-area:hover .image-upload-icon {
+    color: var(--primary-color);
+}
+
+.image-upload-text {
+    color: var(--secondary-color);
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.image-upload-area:hover .image-upload-text {
+    color: var(--primary-color);
+}
+
+.image-upload-preview {
+    max-width: 100%;
+    max-height: 300px;
+    display: none;
+    border-radius: var(--border-radius);
+    margin: 0 auto;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.image-upload-preview.show {
+    display: block;
+}
+
+.image-upload-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.image-upload-remove:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+}
+
+.image-upload-remove.show {
+    opacity: 1;
+}
+
+.image-options {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--light-color);
+    border-radius: var(--border-radius);
+}
+
+.image-quality-label {
+    font-size: 14px;
+    color: var(--secondary-color);
+    white-space: nowrap;
+}
+
+.image-quality-slider {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.image-quality-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.image-quality-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.image-quality-value {
+    font-weight: bold;
+    color: var(--primary-color);
+    min-width: 40px;
+    text-align: right;
+    font-size: 14px;
+}
+
+/* 链接容器样式 */
+.link-container {
+    text-align: center;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    background-color: var(--light-color);
+    border: 1px solid #e9ecef;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.success-icon {
+    font-size: 48px;
+    color: var(--success-color);
+    margin-bottom: 15px;
+}
+
+.link-box {
+    display: flex;
+    margin: 20px 0;
+}
+
+.link-box input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    font-size: 16px;
+    background-color: var(--light-color);
+}
+
+.link-box button {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    padding: 12px 20px;
+}
+
+.note-tip {
+    color: var(--secondary-color);
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.security-info {
+    background-color: var(--light-color);
+    border-left: 4px solid var(--primary-color);
+    padding: 12px 15px;
+    margin: 20px 0;
+    color: var(--secondary-color);
+    font-size: 14px;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.char-counter {
+    text-align: right;
+    color: var(--secondary-color);
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.create-new {
+    margin-top: 25px;
+}
+
+#create-new-btn {
+    background-image: linear-gradient(to right, #2ecc71, #27ae60);
+}
+
+#create-new-btn:hover {
+    background-image: linear-gradient(to right, #27ae60, #219653);
+}
+
+/* 设置面板样式 */
+.settings-panel {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.btn-settings {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 5px;
+}
+
+.btn-settings:hover {
+    color: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+.settings-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background-color: var(--container-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 15px;
+    width: 250px;
+    z-index: 100;
+}
+
+.settings-content.show {
+    display: block;
+}
+
+.setting-group {
+    margin-bottom: 15px;
+}
+
+.setting-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.bg-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--secondary-color);
+    background-color: var(--container-bg);
+    color: var(--text-color);
+}
+
+/* 页脚样式 */
+footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #95a5a6;
+    font-size: 14px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+/* 提示框样式 */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    max-width: 350px;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.toast-success {
+    background-color: var(--success-color);
+}
+
+.toast-error {
+    background-color: var(--danger-color);
+}
+
+.toast-info {
+    background-color: var(--primary-color);
+}
+
+.toast-warning {
+    background-color: #f39c12;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        margin: 15px;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .app-description {
+        font-size: 14px;
+    }
+    
+    #generate-btn {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    .settings-content {
+        width: 200px;
+    }
+    
+    .link-box {
+        flex-direction: column;
+    }
+    
+    .link-box input {
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+    
+    .link-box button {
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        width: 100%;
+    }
+    
+    .image-options {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* 新增美化样式 */
+/* 卡片悬停效果 */
+.container:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* 按钮脉冲效果 */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+    }
+}
+
+#generate-btn {
+    animation: pulse 2s infinite;
+}
+
+/* 输入框焦点效果增强 */
+textarea:focus, select:focus {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+/* 美化滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
+
+/* 链接样式美化 */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #2980b9;
+}
+
+a:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+a:hover:after {
+    width: 100%;
+}
+
+/* 表单元素聚焦时的标签动画 */
+.form-group {
+    position: relative;
+}
+
+.form-group label {
+    transition: all 0.3s ease;
+}
+
+.form-group textarea:focus + label,
+.form-group select:focus + label {
+    color: var(--primary-color);
+    font-weight: 600;
+}
