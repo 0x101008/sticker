@@ -98,6 +98,55 @@ h1:after {
     max-width: 250px;
     transition: all 0.3s ease;
     background-color: #fff;
+}
+
+/* 密码输入框样式 */
+.password-input-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+#password-protect {
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    padding-right: 40px;
+}
+
+#password-protect:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #777;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.toggle-password:hover {
+    color: #3498db;
+}
+
+.password-hint {
+    font-size: 13px;
+    color: #777;
+    margin-top: 8px;
+    font-style: italic;
+}
     color: #333;
     cursor: pointer;
     appearance: none;

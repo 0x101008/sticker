@@ -50,6 +50,17 @@
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label for="password-protect"><i class="fas fa-lock"></i> 密码保护：</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password-protect" name="password" placeholder="设置访问密码（可选）" autocomplete="new-password">
+                        <button type="button" class="toggle-password" tabindex="-1">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-hint">设置密码后，查看纸条时需要输入密码</div>
+                </div>
+                
                 <div class="security-info">
                     <i class="fas fa-shield-alt"></i> 安全提示：纸条在被查看后将可以被销毁
                 </div>
@@ -76,7 +87,7 @@
         </div>
         
         <footer>
-            <p>临时纸条 &copy; <?php echo date('Y'); ?> | 安全、简单、高效的临时信息分享工具</p>
+            <p>临时纸条 &copy; <?php echo date('Y'); ?> | 安全、简单、高效的临时信息分享工具 | <a href="https://github.com/0x101008/sticker" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> 开源地址</a></p>
         </footer>
     </div>
 
@@ -123,5 +134,67 @@
         }
     </script>
     <script src="script.js"></script>
+    <script>
+        // 密码强度检测功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password-protect');
+            const passwordHint = document.querySelector('.password-hint');
+            
+            if (passwordInput && passwordHint) {
+                passwordInput.addEventListener('input', function() {
+                    const password = this.value;
+                    
+                    if (password.length === 0) {
+                        passwordHint.innerHTML = '设置密码后，查看纸条时需要输入密码';
+                        passwordHint.style.color = '#777';
+                        return;
+                    }
+                    
+                    // 检查密码强度
+                    let strength = 0;
+                    let feedback = '';
+                    
+                    // 长度检查
+                    if (password.length >= 8) {
+                        strength += 1;
+                    }
+                    
+                    // 包含数字
+                    if (/\d/.test(password)) {
+                        strength += 1;
+                    }
+                    
+                    // 包含小写字母
+                    if (/[a-z]/.test(password)) {
+                        strength += 1;
+                    }
+                    
+                    // 包含大写字母
+                    if (/[A-Z]/.test(password)) {
+                        strength += 1;
+                    }
+                    
+                    // 包含特殊字符
+                    if (/[^A-Za-z0-9]/.test(password)) {
+                        strength += 1;
+                    }
+                    
+                    // 根据强度显示不同的提示
+                    if (strength <= 2) {
+                        feedback = '<i class="fas fa-exclamation-circle"></i> 密码强度：弱';
+                        passwordHint.style.color = '#e74c3c';
+                    } else if (strength <= 4) {
+                        feedback = '<i class="fas fa-check-circle"></i> 密码强度：中';
+                        passwordHint.style.color = '#f39c12';
+                    } else {
+                        feedback = '<i class="fas fa-shield-alt"></i> 密码强度：强';
+                        passwordHint.style.color = '#27ae60';
+                    }
+                    
+                    passwordHint.innerHTML = feedback;
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -13,6 +13,7 @@
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: DENY');
     header('X-XSS-Protection: 1; mode=block');
+    // 启动会话，用于密码保护功能
     session_start();
     ?>
     <link rel="stylesheet" href="css/style.css">
@@ -598,6 +599,83 @@
             overflow: hidden;
         }
         
+        /* 密码表单样式 */
+        .password-form-container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 25px 0;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .password-form-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .password-form-container p {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .password-form input {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+            font-size: 16px;
+            width: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .submit-password {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .submit-password:hover {
+            background: linear-gradient(to right, #2980b9, #3498db);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
         .image-upload-area.has-image {
             position: relative;
             border-radius: 8px;
@@ -714,6 +792,53 @@
                             <p>纸条已成功销毁！</p>
                           </div>';
                 } else {
+                    // 检查是否需要密码
+                    if ($noteData['has_password'] && !isset($_SESSION['note_auth_'.$noteId])) {
+                        // 如果提交了密码，验证密码
+                        if (isset($_POST['note_password'])) {
+                            if (password_verify($_POST['note_password'], $noteData['password_hash'])) {
+                                // 密码正确，设置会话
+                                $_SESSION['note_auth_'.$noteId] = true;
+                            } else {
+                                // 密码错误，显示错误信息
+                                echo '<div class="error-message">
+                                        <p><i class="fas fa-exclamation-circle"></i> 密码错误，请重试</p>
+                                      </div>';
+                                // 显示密码输入表单
+                                echo '<div class="password-form-container">
+                                        <h2><i class="fas fa-lock"></i> 此纸条受密码保护</h2>
+                                        <p>请输入密码查看内容</p>
+                                        <form method="post" class="password-form">
+                                            <div class="form-group">
+                                                <input type="password" name="note_password" placeholder="输入密码" required>
+                                            </div>
+                                            <button type="submit" class="submit-password">
+                                                <i class="fas fa-unlock"></i> 验证密码
+                                            </button>
+                                        </form>
+                                      </div>';
+                                echo '<a href="index.php" class="back-link">返回创建新纸条</a>';
+                                exit;
+                            }
+                        } else {
+                            // 显示密码输入表单
+                            echo '<div class="password-form-container">
+                                    <h2><i class="fas fa-lock"></i> 此纸条受密码保护</h2>
+                                    <p>请输入密码查看内容</p>
+                                    <form method="post" class="password-form">
+                                        <div class="form-group">
+                                            <input type="password" name="note_password" placeholder="输入密码" required>
+                                        </div>
+                                        <button type="submit" class="submit-password">
+                                            <i class="fas fa-unlock"></i> 验证密码
+                                        </button>
+                                    </form>
+                                  </div>';
+                            echo '<a href="index.php" class="back-link">返回创建新纸条</a>';
+                            exit;
+                        }
+                    }
+                    
                     // 显示纸条内容
                     $rotation = rand(-2, 2);
                     echo '<div class="note-view" style="--rotation: ' . $rotation . 'deg">
@@ -820,7 +945,7 @@
         <a href="index.php" class="back-link">返回创建新纸条</a>
 
         <footer>
-            <p>临时纸条 &copy; <?php echo date('Y'); ?> | 安全、简单、高效的临时信息分享工具</p>
+            <p>临时纸条 &copy; <?php echo date('Y'); ?> | 安全、简单、高效的临时信息分享工具 | <a href="https://github.com/0x101008/sticker" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> 开源地址</a></p>
         </footer>
     </div>
 
@@ -1059,6 +1184,47 @@
             window.location.href = '?id=' + noteId + '&destroy=1';
         }
     }
+    
+    // 密码输入表单功能
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.querySelector('.password-form input[type="password"]');
+        const passwordForm = document.querySelector('.password-form');
+        
+        if (passwordForm) {
+            // 添加密码显示/隐藏按钮
+            const toggleBtn = document.createElement('button');
+            toggleBtn.type = 'button';
+            toggleBtn.className = 'toggle-password';
+            toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+            toggleBtn.tabIndex = -1;
+            
+            if (passwordInput) {
+                // 将按钮添加到密码输入框旁边
+                passwordInput.parentNode.style.position = 'relative';
+                passwordInput.style.paddingRight = '40px';
+                passwordInput.parentNode.appendChild(toggleBtn);
+                
+                // 添加切换密码可见性的功能
+                toggleBtn.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // 切换图标
+                    const icon = this.querySelector('i');
+                    if (type === 'password') {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    } else {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    }
+                });
+                
+                // 自动聚焦密码输入框
+                passwordInput.focus();
+            }
+        }
+    });
     </script>
     <script src="script.js"></script>
     <script src="js/fontawesome-fix.js"></script>

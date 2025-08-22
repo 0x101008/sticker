@@ -38,6 +38,7 @@ if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_tok
 // 获取POST数据
 $content = isset($_POST['content']) ? trim($_POST['content']) : '';
 $expiry = isset($_POST['expiry']) ? floatval($_POST['expiry']) : 24; // 默认24小时
+$password = isset($_POST['password']) ? trim($_POST['password']) : ''; // 获取密码
 
 
 // 验证数据
@@ -133,7 +134,9 @@ try {
         'created' => time(),
         'expiry' => $expiryTimestamp,
         'has_image' => !empty($imagePath),
-        'image_path' => $imagePath
+        'image_path' => $imagePath,
+        'has_password' => !empty($password),
+        'password_hash' => !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : ''
     ];
     
     // 保存到文件
@@ -158,7 +161,8 @@ try {
         'message' => '纸条创建成功',
         'id' => $noteId,
         'url' => $viewUrl,
-        'expiry' => $expiry > 0 ? date('Y-m-d H:i:s', $expiryTimestamp) : '永不过期'
+        'expiry' => $expiry > 0 ? date('Y-m-d H:i:s', $expiryTimestamp) : '永不过期',
+        'has_password' => !empty($password)
     ]);
     
 } catch (Exception $e) {

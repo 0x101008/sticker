@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const noteContent = document.getElementById('note-content');
     const charCount = document.getElementById('char-count');
     const createNewBtn = document.getElementById('create-new-btn');
+    const passwordInput = document.getElementById('password-protect');
+    const togglePasswordBtn = document.querySelector('.toggle-password');
     
 
     
@@ -38,6 +40,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初始化字符计数（仅在元素存在时）
     if (noteContent && charCount) {
         charCount.textContent = noteContent.value.length;
+    }
+    
+    // 密码显示/隐藏功能
+    if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // 切换图标
+            const icon = this.querySelector('i');
+            if (type === 'password') {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
     }
     
     // 表单提交处理（仅在表单存在时）
@@ -66,7 +86,13 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            // 检查响应状态
+            if (!response.ok) {
+                throw new Error(`HTTP错误! 状态: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             // 恢复按钮状态
             submitBtn.innerHTML = originalBtnText;
@@ -90,7 +116,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 linkContainer.scrollIntoView({ behavior: 'smooth' });
                 
                 // 显示成功提示
-                showToast('纸条创建成功！', 'success');
+                let successMessage = '纸条创建成功！';
+                if (data.has_password) {
+                    successMessage += ' (已启用密码保护)';
+                }
+                showToast(successMessage, 'success');
             } else {
                 // 显示错误信息
                 showToast('生成纸条失败: ' + data.message, 'error');
@@ -101,8 +131,12 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.innerHTML = originalBtnText;
             submitBtn.disabled = false;
             
-            // 显示错误信息
-            showToast('发生错误，请稍后再试', 'error');
+            // 显示更具体的错误信息
+            if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_REFUSED')) {
+                showToast('无法连接到服务器。请确保PHP服务器已启动。', 'error');
+            } else {
+                showToast('发生错误: ' + error.message, 'error');
+            }
             console.error(error);
         });
     });
